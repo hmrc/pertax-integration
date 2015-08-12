@@ -14,4 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.pertax.integration.model
+package uk.gov.hmrc.pertax.integration
+
+import org.scalatest.{ShouldMatchers, WordSpec}
+
+class DummySpec extends WordSpec with ShouldMatchers {
+  "dummy test" should {
+    "check 1==1" in {
+      1 shouldBe 1
+    }
+  }
+}

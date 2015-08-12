@@ -1,0 +1,67 @@
+@*
+* Copyright 2015 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
+
+@(article: Html = HtmlFormat.empty,
+mainClass: Option[String] = None,
+mainDataAttributes: Option[Html] = None,
+mainContentHeader: Html = HtmlFormat.empty,
+actingAttorneyBanner: Html = HtmlFormat.empty,
+sidebar: Html = HtmlFormat.empty,
+getHelpForm: Html = HtmlFormat.empty,
+betaBanner: Html,
+includeGridWrapper: Boolean,
+name: Option[String],
+previouslyLoggedInAt: Option[org.joda.time.DateTime])(implicit breadcrumb: uk.gov.hmrc.play.breadcrumb.model.Breadcrumb)
+
+@pertaxMainContentHeader = {
+  @if(!breadcrumb.isEmpty) {
+    @breadcrumbTag(breadcrumb, showLastItem = true)
+  }
+  @mainContentHeader
+}
+
+@serviceInfoContent = {
+  <div class="last-login mobile-hidden">
+    <p class="service-info-p">
+        @for(previouslyLoggedInAt <- previouslyLoggedInAt) {
+          @Messages("global.label._last_signed_in", name.fold("You")(_ + ", you"), uk.gov.hmrc.pertax.integration.util.DateTimeTools.detailed(previouslyLoggedInAt))
+        }
+    </p>
+  </div>
+}
+
+@serviceInfo = {
+  @uk.gov.hmrc.play.views.html.layouts.serviceInfo(
+    betaBanner,
+    includeGridWrapper,
+    Some(serviceInfoContent)
+  )
+}
+
+@pertaxServiceInfo = {
+  @serviceInfo
+}
+
+@uk.gov.hmrc.play.views.html.layouts.main_content(
+  article = article,
+  mainClass = mainClass,
+  mainDataAttributes = mainDataAttributes,
+  mainContentHeader = pertaxMainContentHeader,
+  serviceInfo = pertaxServiceInfo,
+  actingAttorneyBanner = actingAttorneyBanner,
+  sidebar = sidebar,
+  getHelpForm = getHelpForm
+)
